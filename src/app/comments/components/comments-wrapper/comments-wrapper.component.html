@@ -1,0 +1,47 @@
+<div class="comments-wrapper">
+  <div class="header-section">
+    <h3>Коментарі</h3>
+
+    @if (!showAddForm()) {
+      <button class="btn-primary" (click)="showAddForm.set(true)">
+        + Додати коментар
+      </button>
+    }
+  </div>
+
+  @if (showAddForm()) {
+    <div class="new-comment-form">
+      <app-comment-form
+        submitLabel="Опублікувати"
+        (cancel)="showAddForm.set(false)"
+        (save)="onAddComment($event)">
+      </app-comment-form>
+    </div>
+  }
+
+  @if (loading$ | async) {
+    <div class="loading-spinner">Завантаження...</div>
+  }
+
+  @if (error$ | async; as error) {
+    <div class="error-message">
+      Помилка: {{ error }}
+    </div>
+  }
+
+  @if (comments$ | async; as comments) {
+    <app-comment-list
+      [comments]="comments"
+      (reply)="onReply($event)"
+      (edit)="onUpdate($event)"
+      (delete)="onDelete($event)"
+      (pin)="onPin($event)"
+      (unpin)="onUnpin($event)"
+      (hide)="onHide($event)">
+    </app-comment-list>
+  }
+
+  <div class="add-comment-section">
+    <button class="btn-primary">Додати новий коментар</button>
+  </div>
+</div>

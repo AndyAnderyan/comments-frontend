@@ -1,0 +1,81 @@
+<div class="comment-container"
+     [class.pinned]="comment.isPinned"
+     [class.unread]="comment.isNotifiedToMeAndUnread"
+     [class.hidden]="comment.isHidden">
+  <div class="comment-header">
+    <span class="author-name">{{ comment.author.name }}</span>
+    <span class="date">{{ comment.createdAt | date:'short' }}</span>
+
+    @if (comment.isPinned) {
+      <span class="badge pinned-badge">📌 Закріплено</span>
+    }
+    @if (comment.isHidden) {
+      <span class="badge hidden-badge">👁️ Приховано</span>
+    }
+  </div>
+
+  @if (activeAction() === 'edit') {
+    <app-comment-form
+      [initialValue]="comment"
+      submitLabel="Зберегти"
+      (cancel)="cancelAction()"
+      (save)="onFormSave($event)">
+    </app-comment-form>
+  } @else {
+    <div class="comment-body">
+      <p>{{ comment.text }}</p>
+    </div>
+
+    <div class="comment-actions">
+      @if (canReply) {
+        <button (click)="startReply()" class="btn-text">Відповісти</button>
+      }
+
+      @if (isAuthor || isAdmin) {
+        <button (click)="startEdit()" class="btn-text">Редагувати</button>
+      }
+
+      @if (isAdmin) {
+        <button (click)="delete.emit(comment.id)" class="btn-text text-danger">Видалити</button>
+        @if (!comment.isHidden) {
+          <button (click)="hide.emit(comment)" class="btn-text">Приховати</button>
+        }
+      }
+
+      @if ((isAuthor || isAdmin) && !comment.parentId) {
+        @if (comment.isPinned) {
+          <button (click)="unpin.emit(comment)" class="btn-text">Відкріпити</button>
+        } @else {
+          <button (click)="pin.emit(comment)" class="btn-text">Закріпити</button>
+        }
+      }
+    </div>
+  }
+
+  @if (activeAction() === 'reply') {
+    <div class="reply-form-container">
+      <app-comment-form
+        submitLabel="Відповісти"
+        (cancel)="cancelAction()"
+        (save)="onFormSave($event)">
+      </app-comment-form>
+    </div>
+  }
+
+</div>
+
+@if (comment.replies && comment.replies.length > 0) {
+  <div class="replies-container">
+    @for (replyComment of comment.replies; track replyComment.id) {
+      <app-comment-thread
+        [comment]="replyComment"
+        (reply)="reply.emit($event)"
+        (update)="update.emit($event)"
+        (delete)="delete.emit($event)"
+        (pin)="pin.emit($event)"
+        (unpin)="unpin.emit($event)"
+        (hide)="hide.emit($event)">
+      </app-comment-thread>
+    }
+  </div>
+}

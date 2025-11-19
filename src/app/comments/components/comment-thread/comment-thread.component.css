@@ -1,0 +1,76 @@
+.comment-container {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+  transition: background 0.3s;
+
+  &.pinned {
+    background-color: #fff9e6;
+  border-left: 3px solid #ffc107;
+  }
+
+  &.unread {
+    background-color: #e8f0fe;
+  }
+
+  &.hidden {
+    opacity: 0.6;
+    background-color: #f8f9fa;
+  }
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 6px;
+
+  .author-name {
+    font-weight: 600;
+    color: #333;
+  }
+}
+
+.comment-body {
+  font-size: 0.95rem;
+  white-space: pre-wrap;
+  margin-bottom: 8px;
+}
+
+.comment-actions {
+  display: flex;
+  gap: 12px;
+
+  .btn-text {
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.8rem;
+    color: #007bff;
+    cursor: pointer;
+    &:hover { text-decoration: underline; }
+
+    &.text-danger { color: #dc3545; }
+  }
+}
+
+.replies-container {
+  margin-left: 24px;
+  border-left: 2px solid #eee;
+}
+
+.badge {
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: #eee;
+}
+
+.reply-form-container {
+  margin-top: 10px;
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: 2px solid #007bff;
+}

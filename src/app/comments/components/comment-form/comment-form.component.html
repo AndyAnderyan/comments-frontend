@@ -1,0 +1,27 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="comment-form">
+  <div class="form-group">
+    <textarea
+      formControlName="text"
+      placeholder="Ваш коментар..."
+      rows="3"
+      class="form-control"
+      [class.is-invalid]="text?.invalid && text?.touched">
+    </textarea>
+
+    @if (text?.hasError('required') && text?.touched) {
+      <div class="error-text">Текст коментаря обов'язковий.</div>
+    }
+    @if (text?.hasError('maxlenght')) {
+      <div class="error-text">Максимальна довжина - 2000 символів.</div>
+    }
+  </div>
+
+  <div class="form-actions">
+    <button type="button" (click)="onCancel()" class="btn-secondary">
+      Скасувати
+    </button>
+    <button type="submit" [disabled]="form.invalid || form.pristine" class="btn-primary">
+      {{ submitLabel }}
+    </button>
+  </div>
+</form>

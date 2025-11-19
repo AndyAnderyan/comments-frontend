@@ -1,0 +1,17 @@
+<div class="comments-list">
+  @for (comment of comments; track comment.id) {
+    <app-comment-thread
+      [comment]="comment"
+      (reply)="reply.emit($event)"
+      (update)="edit.emit($event)"
+      (delete)="delete.emit($event)"
+      (pin)="pin.emit($event)"
+      (unpin)="unpin.emit($event)"
+      (hide)="hide.emit($event)">
+    </app-comment-thread>
+  } @empty {
+    <div class="empty-state">
+      Коментарів ще немає. Будьте першим!
+    </div>
+  }
+</div>

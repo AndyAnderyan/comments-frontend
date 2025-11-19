@@ -1,0 +1,11 @@
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.empty-state {
+  padding: 20px;
+  text-align: center;
+  color: #888;
+  font-style: italic;
+}
