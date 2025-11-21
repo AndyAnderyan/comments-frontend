@@ -1,0 +1,68 @@
+<div class="chat-container" *ngIf="selectedTopicId$ | async as topicId; else noSelection">
+
+  <div class="chat-header" *ngIf="topicId !== 'new'">
+    <span class="chat-title">Чат</span>
+  </div>
+
+  <div class="messages-area" #scrollContainer>
+    @if (topicId === 'new') {
+      <div class="new-topic-placeholder">
+        <h3>Створення нової теми</h3>
+        <p>Напишіть перше повідомлення, щоб почати обговорення.</p>
+      </div>
+    } @else {
+      @for (msg of messages$ | async; track msg.id) {
+        <div class="message-item">
+          <div class="msg-avatar">{{ msg.author.name.charAt(0) }}</div>
+
+          <div class="msg-content">
+            <div class="msg-meta">
+              <span class="author">{{ msg.author.name }}</span>
+              <span class="reply-btn" (click)="setReply(msg)">↩ Відповісти</span>
+            </div>
+
+            @if (msg.parentId && msg.parentId !== topicId) {
+              @if ((commentEntities$ | async)?.[msg.parentId]; as parent) {
+                <div class="reply-preview-block">
+                  <div class="reply-bar"></div>
+                  <div class="reply-content">
+                    <div class="reply-author">{{ parent.author.name }}</div>
+                    <div class="reply-text">{{ parent.text | slice:0:50 }}...</div>
+                  </div>
+                </div>
+              }
+            }
+
+            <div class="msg-text">{{ msg.text }}</div>
+            <div class="msg-time">{{ msg.createdAt | date:'shortTime' }}</div>
+          </div>
+        </div>
+      }
+    }
+  </div>
+
+  <div class="input-area">
+    @if (replyToMessage(); as reply) {
+      <div class="reply-context">
+        <div class="icon">↩</div>
+        <div class="info">
+          <span>Відповідь для <b>{{ reply.author.name }}</b></span>
+          <span class="text-preview">{{ reply.text | slice:0:40 }}...</span>
+        </div>
+        <button class="close-btn" (click)="cancelReply()">×</button>
+      </div>
+    }
+
+    <app-comment-form
+      [submitLabel]="topicId === 'new' ? 'Створити' : 'Надіслати'"
+      (save)="sendMessage($event, topicId)">
+    </app-comment-form>
+  </div>
+
+</div>
+
+<ng-template #noSelection>
+  <div class="empty-chat">
+    <p>Виберіть тему зліва або створіть нову</p>
+  </div>
+</ng-template>

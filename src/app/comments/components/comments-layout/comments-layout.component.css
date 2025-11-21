@@ -1,0 +1,21 @@
+.layout-container {
+  display: flex;
+  height: 600px; /* Фіксована висота або 100% батька */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+}
+.sidebar {
+  width: 30%;
+  min-width: 250px;
+  border-right: 1px solid #eee;
+  background: #f9f9f9;
+  overflow-y: auto;
+}
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+}

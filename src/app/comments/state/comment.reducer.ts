@@ -1,7 +1,7 @@
 import {createEntityAdapter, EntityAdapter, EntityState} from "@ngrx/entity";
 import {Comment} from "../models/comment.model"
 import {createFeature, createReducer, on} from "@ngrx/store";
-import {CommentsActions} from "./commentsActions";
+import {CommentActions} from "./comment.actions";
 import {state} from "@angular/animations";
 
 export interface CommentsState extends EntityState<Comment> {
@@ -10,6 +10,7 @@ export interface CommentsState extends EntityState<Comment> {
   currentObjectId: string | null;
 
   pinnedCommentId: string | null;
+  selectedTopicId: string | null;
 
   totalCount: number;
   loading: boolean;
@@ -27,6 +28,7 @@ export const initialState: CommentsState = adapter.getInitialState({
   currentObjectTypeId: null,
   currentObjectId: null,
   pinnedCommentId: null,
+  selectedTopicId: null,
   totalCount: 0,
   loading: false,
   error: null,
@@ -38,23 +40,29 @@ export const commentsFeature = createFeature({
   reducer: createReducer(
     initialState,
 
-    on(CommentsActions.setObjectContext, (state, {objectTypeId, objectId}) => ({
+    on(CommentActions.selectTopic, (state, { id }) => ({
+      ...state,
+      selectedTopicId: id,
+    })),
+
+    on(CommentActions.setObjectContext, (state, {objectTypeId, objectId}) => ({
       ...state,
       currentObjectTypeId: objectTypeId,
       currentObjectId: objectId
     })),
 
-    on(CommentsActions.loadComments, (state, {objectTypeId, objectId}) => ({
+    on(CommentActions.loadComments, (state, {objectTypeId, objectId}) => ({
       ...adapter.removeAll(state),
       loading: true,
       error: null,
       pinnedCommentId: null,
+      selectedTopicId: null,
       totalCount: 0,
       currentObjectTypeId: objectTypeId,
       currentObjectId: objectId,
     })),
 
-    on(CommentsActions.loadCommentsSuccess, (state, {response}) => {
+    on(CommentActions.loadCommentsSuccess, (state, {response}) => {
       // Визначаємо чи є закріплений коментар
       const pinned = response.data.find(c => c.isPinned)
 
@@ -66,30 +74,30 @@ export const commentsFeature = createFeature({
       });
     }),
 
-    on(CommentsActions.loadCommentsFailure, (state, {error}) => ({
+    on(CommentActions.loadCommentsFailure, (state, {error}) => ({
       ...state,
       loading: false,
       error,
     })),
 
-    on(CommentsActions.addCommentSuccess, (state, {comment}) => {
+    on(CommentActions.addCommentSuccess, (state, {comment}) => {
       return adapter.addOne(comment, state);
     }),
 
-    on(CommentsActions.updateCommentSuccess, (state, {comment}) => {
+    on(CommentActions.updateCommentSuccess, (state, {comment}) => {
       return adapter.updateOne({id: comment.id, changes: comment}, state);
     }),
 
     // Просто видаляємо замість приховування TODO: треба змінити
-    on(CommentsActions.hideCommentSuccess, (state, { id }) => {
+    on(CommentActions.hideCommentSuccess, (state, { id }) => {
       return adapter.removeOne(id, state);
     }),
 
-    on(CommentsActions.deleteCommentSuccess, (state, { id }) => {
+    on(CommentActions.deleteCommentSuccess, (state, { id }) => {
       return adapter.removeOne(id, state);
     }),
 
-    on(CommentsActions.pinCommentSuccess, (state, { comment }) => {
+    on(CommentActions.pinCommentSuccess, (state, { comment }) => {
       // Знімаємо isPinned з усіх інших
       const updates = state.ids
         .map(id => state.entities[id])
@@ -106,7 +114,7 @@ export const commentsFeature = createFeature({
       }
     }),
 
-    on(CommentsActions.unpinCommentSuccess, (state, { comment }) => {
+    on(CommentActions.unpinCommentSuccess, (state, { comment }) => {
       const newState = adapter.updateOne({ id: comment.id, changes: { isPinned: false }}, state);
       return {
         ...newState,
@@ -114,34 +122,34 @@ export const commentsFeature = createFeature({
       };
     }),
 
-    on(CommentsActions.markAsReadSuccess, (state, { id }) => {
+    on(CommentActions.markAsReadSuccess, (state, { id }) => {
       return adapter.updateOne({ id, changes: { isRead: true, isNotifiedToMeAndUnread: false } }, state);
     }),
 
     // WebSocket
 
-    on(CommentsActions.socketCommentReceived, (state, { comment }) => {
+    on(CommentActions.socketCommentReceived, (state, { comment }) => {
       return adapter.addOne(comment, state);
     }),
 
-    on(CommentsActions.socketCommentUpdated, (state, { comment }) => {
+    on(CommentActions.socketCommentUpdated, (state, { comment }) => {
       return adapter.updateOne({ id: comment.id, changes: comment }, state);
     }),
 
-    on(CommentsActions.socketCommentHidden, (state, { id, isHidden }) => {
+    on(CommentActions.socketCommentHidden, (state, { id, isHidden }) => {
       return adapter.updateOne({ id, changes: { isHidden } }, state);
     }),
 
-    on(CommentsActions.socketCommentDeleted, (state, { id }) => {
+    on(CommentActions.socketCommentDeleted, (state, { id }) => {
       return adapter.removeOne(id, state);
     }),
 
-    on(CommentsActions.socketCommentPinned, (state, { pinnedCommentId }) => ({
+    on(CommentActions.socketCommentPinned, (state, { pinnedCommentId }) => ({
       ...state,
       pinnedCommentId,
     })),
 
-    on(CommentsActions.setUnreadCount, (state, { count }) => ({
+    on(CommentActions.setUnreadCount, (state, { count }) => ({
       ...state,
       unreadNotificationCount: count,
     }))

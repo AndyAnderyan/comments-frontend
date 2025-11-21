@@ -1,0 +1,29 @@
+<div class="topics-header">
+  <h3>Обговорення</h3>
+  <button (click)="createNewTopic()" class="btn-icon" title="Нова тема">+</button>
+</div>
+
+<div class="topics-list">
+  @for (topic of topics$ | async; track topic.id) {
+    <div class="topic-item"
+         [class.active]="topic.id === (selectedTopicId$ | async)"
+         (click)="selectTopic(topic.id)">
+
+      <div class="topic-avatar">
+        {{ topic.author.name.charAt(0) }}
+      </div>
+
+      <div class="topic-info">
+        <div class="topic-top">
+          <span class="author">{{ topic.author.name }}</span>
+          <span class="date">{{ topic.createdAt | date:'shortTime' }}</span>
+        </div>
+        <div class="topic-preview">
+          {{ topic.text | slice:0:50 }}{{ topic.text.length > 50 ? '...' : '' }}
+        </div>
+      </div>
+    </div>
+  } @empty {
+    <div class="empty-state">Немає тем</div>
+  }
+</div>

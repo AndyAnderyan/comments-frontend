@@ -1,0 +1,87 @@
+.topics-header {
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+
+  h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+}
+
+.topic-item {
+  padding: 12px 15px;
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-bottom: 1px solid #f0f0f0;
+
+  &:hover {
+    background-color: #f0f0f0;
+  }
+
+  &.active {
+    background-color: #3390ec;
+    color: white;
+  }
+
+  &.active .topic-info .topic-preview {
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  &.active .topic-info .topic-top .date {
+    color: rgba(255, 255, 255, 0.8);
+  }
+}
+
+.topic-avatar {
+  width: 40px;
+  height: 40px;
+  background: #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  flex-shrink: 0;
+}
+
+.topic-info {
+  flex: 1;
+  overflow: hidden;
+
+  .topic-top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+    font-weight: 600;
+
+    .date {
+      font-weight: normal;
+      font-size: 0.8rem;
+      color: #888;
+    }
+  }
+
+  .topic-preview {
+    font-size: 0.85rem;
+    color: #666;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+.btn-icon {
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+}

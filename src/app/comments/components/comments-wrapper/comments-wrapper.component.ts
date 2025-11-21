@@ -1,6 +1,6 @@
 import {ChangeDetectionStrategy, Component, inject, Input, OnInit, signal} from '@angular/core';
 import {Store} from "@ngrx/store";
-import {CommentsActions} from "../../state/commentsActions";
+import {CommentActions} from "../../state/comment.actions";
 import {Comment} from "../../models/comment.model"
 import {selectCommentTree, selectError, selectIsLoading} from "../../state/comment.selectors";
 import {Observable} from "rxjs";
@@ -33,7 +33,7 @@ export class CommentsWrapperComponent implements OnInit {
   ngOnInit(): void {
     console.log('start')
     // Ініціалізуємо контекст та завантажуємо дані
-    this.store.dispatch(CommentsActions.loadComments({
+    this.store.dispatch(CommentActions.loadComments({
       objectTypeId: this.objectTypeId,
       objectId: this.objectId
     }));
@@ -41,7 +41,7 @@ export class CommentsWrapperComponent implements OnInit {
 
   // Додавання кореневого коментаря
   onAddComment(data: { text: string; recipientsIds: string[] }): void {
-    this.store.dispatch(CommentsActions.addComment({
+    this.store.dispatch(CommentActions.addComment({
       dto: {
         text: data.text,
         recipientsIds: data.recipientsIds,
@@ -55,7 +55,7 @@ export class CommentsWrapperComponent implements OnInit {
 
 // Додавання відповіді
   onReply(data: { parentId: string | null; text: string; recipientsIds: string[] }): void {
-    this.store.dispatch(CommentsActions.addComment({
+    this.store.dispatch(CommentActions.addComment({
       dto: {
         text: data.text,
         recipientsIds: data.recipientsIds,
@@ -68,7 +68,7 @@ export class CommentsWrapperComponent implements OnInit {
 
   // Редагування
   onUpdate(data: { id: string; text: string; recipientsIds: string[] }): void {
-    this.store.dispatch(CommentsActions.updateComment({
+    this.store.dispatch(CommentActions.updateComment({
       id: data.id,
       dto: {
         text: data.text,
@@ -79,19 +79,19 @@ export class CommentsWrapperComponent implements OnInit {
 
   onDelete(id: string) {
     if (confirm('Ви впевнені, що хочете видалити цей коментар? Це видалить і всі відповіді.')) {
-      this.store.dispatch(CommentsActions.deleteComment({id}));
+      this.store.dispatch(CommentActions.deleteComment({id}));
     }
   }
 
   onPin(comment: Comment) {
-    this.store.dispatch(CommentsActions.pinComment({comment}));
+    this.store.dispatch(CommentActions.pinComment({comment}));
   }
 
   onUnpin(comment: Comment) {
-    this.store.dispatch(CommentsActions.unpinComment({comment}));
+    this.store.dispatch(CommentActions.unpinComment({comment}));
   }
 
   onHide(comment: Comment) {
-    this.store.dispatch(CommentsActions.hideComment({comment}));
+    this.store.dispatch(CommentActions.hideComment({comment}));
   }
 }

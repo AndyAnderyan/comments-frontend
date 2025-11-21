@@ -4,9 +4,12 @@ import {Comment} from "../models/comment.model";
 import {CommentCreateDto} from "../dto/comment-create.dto";
 import {CommentUpdateDto} from "../dto/comment-update.dto";
 
-export const CommentsActions = createActionGroup({
+export const CommentActions = createActionGroup({
   source: 'Comments API',
   events: {
+    // Додаємо в групу подій
+    'Select Topic': props<{ id: string }>(),
+
     // ініціалізація контексту (який об'єкт ми дивимось)
     'Set Object Context': props<{ objectTypeId: string, objectId: string }>(),
 
