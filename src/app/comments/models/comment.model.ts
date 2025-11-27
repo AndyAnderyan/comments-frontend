@@ -12,6 +12,7 @@ export interface Comment extends ObjectRef{
   createdAt: string;
   updatedAt: string | null;
 
+  parent?: Comment;
   parentId: string | null;
   level: number;
 

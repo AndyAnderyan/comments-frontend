@@ -1,0 +1,59 @@
+<article
+  class="message-card"
+  [class.message-card--right]="isMine"
+  [class.pinned]="message.isPinned"
+  [class.hidden]="message.isHidden"
+>
+  <header>
+    <span class="author">{{ message.author.name }}</span>
+
+    <div class="menu-container">
+      <button
+        class="chat-icon-button"
+        type="button"
+        aria-label="Опції"
+        (click)="toggleMenu($event)">
+        <span class="icon icon-more"></span>
+      </button>
+
+      @if (isMenuOpen) {
+        <div class="dropdown-menu">
+          <button (click)="onAction('edit')">Редагувати</button>
+          <button (click)="onAction('pin')">
+            {{ message.isPinned ? 'Відкріпити' : 'Закріпити' }}
+          </button>
+          <button (click)="onAction('hide')">
+            {{ message.isHidden ? 'Показати' : 'Приховати' }}
+          </button>
+          <div class="divider"></div>
+          <button class="danger" (click)="onAction('delete')">Видалити</button>
+        </div>
+        <div class="menu-overlay" (click)="closeMenu()"></div>
+      }
+    </div>
+  </header>
+
+  @if (message.parent) {
+    <div class="message-reply" (click)="onQuoteClick()" title="Перейти до повідомлення">
+      <div class="reply-line"></div>
+      <div class="reply-content">
+        <div class="reply-author">{{ message.parent!.author.name }}</div>
+        <div class="reply-text">{{ message.parent!.text }}</div>
+      </div>
+    </div>
+  }
+
+  <p class="message-text">
+    {{ message.text }}
+  </p>
+
+  <footer>
+    <button class="link-button" type="button" (click)="onAction('reply')">Відповісти</button>
+    <div class="footer-right">
+      <span class="message-time">{{ message.createdAt | date:'HH:mm' }}</span>
+      @if (message.isPinned) {
+        <span class="status-icon">📌</span>
+      }
+    </div>
+  </footer>
+</article>

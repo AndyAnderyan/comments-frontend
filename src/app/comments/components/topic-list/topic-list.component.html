@@ -1,29 +1,30 @@
-<div class="topics-header">
-  <h3>Обговорення</h3>
-  <button (click)="createNewTopic()" class="btn-icon" title="Нова тема">+</button>
-</div>
+<aside class="chat-sidebar">
+  <div class="sidebar-search">
+    <span class="icon icon-search"></span>
+    <input type="text" placeholder="Шукати серед коментарів..." />
+  </div>
 
-<div class="topics-list">
-  @for (topic of topics$ | async; track topic.id) {
-    <div class="topic-item"
-         [class.active]="topic.id === (selectedTopicId$ | async)"
-         (click)="selectTopic(topic.id)">
+  <div class="sidebar-topics">
+    @for (topic of topics; track topic.id) {
+      <article
+        class="topic-card"
+        [class.topic-card--active]="topic.id === selectedTopicId"
+        (click)="selectTopic.emit(topic.id)">
+        <header>
+          <h4>{{ topic.author.name }}</h4>
+          <time>{{ topic.createdAt | date:'shortTime' }}</time>
+        </header>
+        <p>{{ topic.text }}</p> </article>
+    }
+    @if (topics.length === 0) {
+      <div class="empty-state">Немає тем</div>
+    }
+  </div>
 
-      <div class="topic-avatar">
-        {{ topic.author.name.charAt(0) }}
-      </div>
-
-      <div class="topic-info">
-        <div class="topic-top">
-          <span class="author">{{ topic.author.name }}</span>
-          <span class="date">{{ topic.createdAt | date:'shortTime' }}</span>
-        </div>
-        <div class="topic-preview">
-          {{ topic.text | slice:0:50 }}{{ topic.text.length > 50 ? '...' : '' }}
-        </div>
-      </div>
-    </div>
-  } @empty {
-    <div class="empty-state">Немає тем</div>
-  }
-</div>
+  <div class="sidebar-footer">
+    <button class="btn btn-primary" type="button" (click)="createTopic.emit()">
+      <span class="icon icon-comments"></span>
+      Створити тему
+    </button>
+  </div>
+</aside>

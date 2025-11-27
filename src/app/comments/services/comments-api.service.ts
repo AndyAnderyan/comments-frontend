@@ -21,7 +21,7 @@ export class CommentsApiService {
   private readonly API_URL = 'http://localhost:3000/comments';
 
   // TODO: (переробити) Отримуємо коментарі
-  getComments(objectTypeId: string, objectId: string, page: number = 1, limit: number = 20): Observable<PaginatedResponse<Comment>> {
+  getComments(objectTypeId: string, objectId: string, page: number = 1, limit: number = 99999): Observable<PaginatedResponse<Comment>> {
     let params = new HttpParams()
       .set('objectTypeId', objectTypeId)
       .set('objectId', objectId)
@@ -68,11 +68,12 @@ export class CommentsApiService {
 
   getRecipients(): Observable<NotificationRecipient[]> {
     const mockRecipients: NotificationRecipient[] = [
-      { id: 'user-1-uuid', name: 'Адміністратор' },
-      { id: 'user-2-uuid', name: 'Іван Франко' },
-      { id: 'user-3-uuid', name: 'Леся Українка' },
-    ]
+      { id: '1', name: 'Олександр Петренко', email: 'o.petrenko@example.com', role: 'admin' },
+      { id: '2', name: 'Марія Коваленко', email: 'm.kovalenko@example.com', role: 'user' },
+      { id: '3', name: 'Іван Сидоренко', email: 'i.sydorenko@example.com', role: 'user' }
+    ] as any
 
-    return this.http.get<NotificationRecipient[]>('api/users-mock');
+    // return this.http.get<NotificationRecipient[]>('api/users-mock');
+    return of(mockRecipients);
   }
 }

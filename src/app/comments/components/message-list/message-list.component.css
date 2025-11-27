@@ -1,0 +1,58 @@
+:host {
+  display: flex;
+  flex: 1;
+  min-height: 0; /* Важливо для flex-контейнера */
+  overflow: hidden;
+}
+
+.chat-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: #f2f3f6;
+  padding: 8px 12px 0; /* Bottom padding 0 бо інпут окремо */
+  gap: 12px;
+  height: 100%;
+}
+
+.chat-timeline-label {
+  align-self: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #737c89;
+  margin-bottom: 4px;
+}
+
+.chat-message-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 12px; /* Відступ знизу */
+}
+
+.empty-state {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #737c89;
+  font-size: 13px;
+}
+
+/* Анімація фокусу */
+.message-wrapper {
+  transition: background-color 0.5s ease;
+  border-radius: 8px;
+}
+
+.highlight-message {
+  animation: highlight 1.5s ease-out;
+}
+
+@keyframes highlight {
+  0% { background-color: rgba(0, 140, 255, 0.2); }
+  50% { background-color: rgba(0, 140, 255, 0.2); }
+  100% { background-color: transparent; }
+}

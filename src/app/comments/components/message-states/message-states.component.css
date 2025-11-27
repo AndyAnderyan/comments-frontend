@@ -1,0 +1,203 @@
+/* Base Message Item Styles */
+.message-item {
+  border-bottom: 1px solid #e6e6e6;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: 'Daikon', sans-serif;
+  box-sizing: border-box;
+  outline: none;
+}
+
+/* Message States - Background Colors */
+.message-default {
+  background: transparent;
+}
+
+.message-unread,
+.message-unread-notification {
+  background: #e5f3ff;
+}
+
+.message-selected {
+  border-left: 4px solid #008cff;
+  padding-left: 12px; /* Adjust padding to account for border */
+}
+
+/* Hover States */
+.message-item:hover {
+  background-color: rgba(0, 140, 255, 0.05);
+}
+
+.message-unread:hover,
+.message-unread-notification:hover {
+  background-color: rgba(0, 140, 255, 0.15);
+}
+
+/* Focus States for Accessibility */
+.message-item:focus-visible {
+  outline: 2px solid #008cff;
+  outline-offset: -2px;
+}
+
+/* Message Header */
+.message-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.message-title-section {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0; /* Allow text truncation */
+}
+
+.notification-icon {
+  color: #17273f;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.message-title {
+  font-family: 'Daikon', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #17273f;
+  margin: 0;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.message-date-section {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.message-date {
+  font-family: 'Daikon', sans-serif;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #737c89;
+  text-align: right;
+}
+
+/* Message Body */
+.message-body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.message-content {
+  font-family: 'Daikon', sans-serif;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #505050;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  white-space: pre-wrap;
+  width: 100%;
+}
+
+/* Active/Pressed States */
+.message-item:active {
+  background-color: rgba(0, 140, 255, 0.1);
+}
+
+.message-unread:active,
+.message-unread-notification:active {
+  background-color: rgba(0, 140, 255, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .message-item {
+    padding: 10px 12px;
+  }
+  
+  .message-selected {
+    padding-left: 8px;
+  }
+  
+  .message-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .message-date-section {
+    align-self: flex-end;
+  }
+  
+  .message-title-section {
+    width: 100%;
+  }
+}
+
+/* Animation for smooth state transitions */
+.message-item {
+  transition: background-color 0.2s ease, border-left 0.2s ease, padding-left 0.2s ease;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .message-item {
+    border-bottom-color: #000;
+  }
+  
+  .message-selected {
+    border-left-color: #000;
+  }
+  
+  .notification-icon {
+    color: #000;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .message-item {
+    transition: none;
+  }
+}
+
+/* Dark mode support (if needed) */
+@media (prefers-color-scheme: dark) {
+  .message-item {
+    border-bottom-color: #444;
+  }
+  
+  .message-title {
+    color: #fff;
+  }
+  
+  .message-date {
+    color: #ccc;
+  }
+  
+  .message-content {
+    color: #ddd;
+  }
+  
+  .notification-icon {
+    color: #fff;
+  }
+}

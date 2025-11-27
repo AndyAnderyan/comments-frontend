@@ -1,0 +1,41 @@
+<div 
+  [class]="messageClasses"
+  (click)="onClick()"
+  [attr.aria-selected]="message.isSelected"
+  [attr.aria-label]="'Повідомлення: ' + message.title"
+  role="button"
+  tabindex="0"
+  (keydown.enter)="onClick()"
+  (keydown.space)="onClick()"
+>
+  <!-- Message Header -->
+  <div class="message-header">
+    <div class="message-title-section">
+      <!-- Notification Icon (for unread-notification state) -->
+      <svg 
+        *ngIf="hasNotificationIcon" 
+        class="notification-icon" 
+        width="16" 
+        height="16" 
+        viewBox="0 0 24 24" 
+        fill="none"
+      >
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      
+      <!-- Message Title -->
+      <h4 class="message-title">{{ message.title }}</h4>
+    </div>
+    
+    <!-- Message Date -->
+    <div class="message-date-section">
+      <span class="message-date">{{ message.date }}</span>
+    </div>
+  </div>
+
+  <!-- Message Body -->
+  <div class="message-body">
+    <p class="message-content">{{ message.content }}</p>
+  </div>
+</div>

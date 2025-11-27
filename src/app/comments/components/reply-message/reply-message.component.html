@@ -1,0 +1,57 @@
+<div class="reply-message-container">
+  <!-- Message Header -->
+  <div class="message-header">
+    <h4 class="author-name">{{ message.author }}</h4>
+    <button 
+      *ngIf="showActions" 
+      class="more-button" 
+      type="button"
+      (click)="onMore()"
+      aria-label="Більше дій"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="1" fill="currentColor"/>
+        <circle cx="12" cy="5" r="1" fill="currentColor"/>
+        <circle cx="12" cy="19" r="1" fill="currentColor"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Message Body -->
+  <div class="message-body">
+    
+    <!-- Reply Quote (if exists) -->
+    <div *ngIf="hasReply" class="reply-quote" (click)="onReplyToClick()">
+      <div class="reply-line"></div>
+      <div class="reply-content">
+        <div class="reply-header">
+          <span class="reply-author">{{ message.replyTo!.author }}</span>
+        </div>
+        <div class="reply-text">
+          <p class="reply-message">{{ truncatedReplyContent }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Message Content -->
+    <div class="main-content">
+      <p class="message-text">{{ message.content }}</p>
+    </div>
+  </div>
+
+  <!-- Message Footer -->
+  <div class="message-footer">
+    <button 
+      *ngIf="showActions" 
+      class="reply-button" 
+      type="button"
+      (click)="onReply()"
+    >
+      Відповісти
+    </button>
+    
+    <div class="message-details">
+      <span class="message-time">{{ message.time }}</span>
+    </div>
+  </div>
+</div>

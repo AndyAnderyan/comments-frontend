@@ -1,87 +1,162 @@
-.topics-header {
-  padding: 15px;
+:host {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #eee;
-
-  h3 {
-    margin: 0;
-    font-size: 1.1rem;
-  }
+  height: 100%;
+  min-height: 0; /* Важливо для скролу */
 }
 
-.topic-item {
-  padding: 12px 15px;
+.chat-sidebar {
+  width: 304px; /* Фіксована ширина згідно дизайну */
+  border-right: 1px solid #e8e8e8;
+  background: #fbfbfb;
   display: flex;
-  gap: 10px;
-  cursor: pointer;
-  transition: background 0.2s;
-  border-bottom: 1px solid #f0f0f0;
-
-  &:hover {
-    background-color: #f0f0f0;
-  }
-
-  &.active {
-    background-color: #3390ec;
-    color: white;
-  }
-
-  &.active .topic-info .topic-preview {
-    color: rgba(255, 255, 255, 0.8);
-  }
-
-  &.active .topic-info .topic-top .date {
-    color: rgba(255, 255, 255, 0.8);
-  }
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  height: 100%;
 }
 
-.topic-avatar {
-  width: 40px;
-  height: 40px;
-  background: #ccc;
-  border-radius: 50%;
+/* Пошук */
+.sidebar-search {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-weight: bold;
-  color: white;
+  gap: 8px;
+  padding: 0 12px;
+  height: 44px;
+  border-radius: 8px;
+  background: #fff;
+  border: 1px solid #e8e8e8;
   flex-shrink: 0;
 }
 
-.topic-info {
+.sidebar-search input {
+  border: none;
   flex: 1;
-  overflow: hidden;
-
-  .topic-top {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 4px;
-    font-size: 0.9rem;
-    font-weight: 600;
-
-    .date {
-      font-weight: normal;
-      font-size: 0.8rem;
-      color: #888;
-    }
-  }
-
-  .topic-preview {
-    font-size: 0.85rem;
-    color: #666;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
+  height: 100%;
+  font-size: 12px;
+  color: #737c89;
+  outline: none;
 }
 
-.btn-icon {
-  background: none;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
+/* Список */
+.sidebar-topics {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-right: 4px; /* Місце для скролбару */
+}
+
+.topic-card {
+  border-bottom: 1px solid transparent;
+  border-radius: 6px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: #fff;
+  border: 1px solid transparent;
   cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.topic-card:hover {
+  background-color: #f9f9f9;
+}
+
+.topic-card--active {
+  border-color: #008cff;
+  background: #f2f3f6;
+}
+
+.topic-card header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.topic-card h4 {
+  font-size: 12px;
+  font-weight: 700;
+  margin: 0;
+  color: #17273f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.topic-card time {
+  font-size: 12px;
+  color: #737c89;
+  flex-shrink: 0;
+}
+
+.topic-card p {
+  font-size: 12px;
+  line-height: 1.35;
+  color: #161616;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Обмеження до 2 рядків */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  color: #999;
+  font-size: 12px;
+}
+
+/* Футер */
+.sidebar-footer {
+  padding: 8px 8px 0;
+  flex-shrink: 0;
+}
+
+.btn {
+  border: none;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.35;
+  width: 100%; /* На всю ширину */
+}
+
+.btn-primary {
+  background: #008cff;
+  color: #fff;
+  padding: 8px 16px;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: #0070cc;
+}
+
+/* Іконки (base64 з вашого файлу) */
+.icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.icon-search {
+  background-image: url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M9.1665 15.8333C12.3871 15.8333 14.9998 13.2206 14.9998 9.99996C14.9998 6.77936 12.3871 4.16663 9.1665 4.16663C5.94589 4.16663 3.33317 6.77936 3.33317 9.99996C3.33317 13.2206 5.94589 15.8333 9.1665 15.8333Z' stroke='%23737C89' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M16.6668 16.6666L14.1668 14.1666' stroke='%23737C89' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.icon-comments {
+  width: 18px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6H14M4 9H14M4 12H10' stroke='%23FFFFFF' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
 }

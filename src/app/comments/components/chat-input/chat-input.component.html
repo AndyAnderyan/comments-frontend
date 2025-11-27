@@ -1,0 +1,77 @@
+<div class="chat-input-container">
+  @if (replyTo || editingMessage) {
+    <div class="context-bar">
+      <div class="context-icon">
+        @if (replyTo) { ↩ }
+        @if (editingMessage) { ✎ }
+      </div>
+      <div class="context-info">
+        <div class="context-title">
+          @if (replyTo) { Відповідь для {{ replyTo.author.name }} }
+          @if (editingMessage) { Редагування }
+        </div>
+        <div class="context-text">
+          {{ replyTo?.text || editingMessage?.text }}
+        </div>
+      </div>
+      <button class="close-context-btn" (click)="onCancelContext()"></button>
+    </div>
+  }
+</div>
+
+<form class="chat-input-row" (submit)="$event.preventDefault()">
+  <label class="chat-input">
+    <input
+      type="text"
+      [(ngModel)]="text"
+      name="messageText"
+      placeholder="Напишіть коментар"
+      autocomplete="off"
+      (keydown.enter)="onSend()"
+    />
+  </label>
+
+  <div class="chat-submit">
+    <button
+      class="btn btn-primary"
+      type="button"
+      aria-label="Надіслати"
+      [disabled]="!text.trim()"
+      (click)="onSend()">
+      <span class="icon icon-send"></span>
+    </button>
+
+    <button
+      class="btn btn-primary btn-primary--split"
+      type="button"
+      aria-label="Отримувачі сповіщень"
+      [class.active]="showRecipientsMenu"
+      (click)="toggleRecipientsMenu($event)">
+      <span class="icon icon-arrow-down"></span>
+      @if (selectedRecipientsIds.length > 0) {
+        <span class="badge">{{ selectedRecipientsIds.length }}</span>
+      }
+    </button>
+
+    @if (showRecipientsMenu) {
+      <div class="recipients-dropdown" (click)="$event.stopPropagation()">
+        <div class="dropdown-header">Сповістити користувачів:</div>
+        <div class="dropdown-list">
+          @for (user of users(); track user.id) {
+            <label class="recipient-item">
+              <input
+                type="checkbox"
+                [checked]="isSelected(user.id)"
+                (change)="toggleRecipient(user.id)">
+              <span class="user-name">{{ user.name }}</span>
+            </label>
+          }
+          @if (users().length === 0) {
+            <div class="empty-state">Список користувачів порожній</div>
+          }
+        </div>
+      </div>
+      <div class="menu-overlay" (click)="closeMenu()"></div>
+    }
+  </div>
+</form>

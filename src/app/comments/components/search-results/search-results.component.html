@@ -1,0 +1,94 @@
+<div class="search-results-container">
+  <!-- Search Header -->
+  <div class="search-header">
+    <div class="search-input-wrapper">
+      <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+        <path d="m21 21-4.35-4.35" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      
+      <form [formGroup]="searchForm">
+        <input
+          type="text"
+          class="search-input"
+          [placeholder]="placeholder"
+          formControlName="searchQuery"
+        />
+      </form>
+      
+      <button 
+        *ngIf="hasSearchQuery" 
+        class="clear-button" 
+        type="button"
+        (click)="onClearSearch()"
+        aria-label="Очистити пошук"
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Results Content -->
+  <div class="results-content">
+    <div class="results-list">
+      
+      <!-- Topics Section -->
+      <div *ngIf="hasTopics" class="results-section">
+        <div class="section-divider">
+          <p class="section-title">Результати серед тем</p>
+        </div>
+        
+        <div 
+          *ngFor="let topic of filteredTopics()" 
+          class="result-item"
+          (click)="onResultClick(topic)"
+        >
+          <div class="result-header">
+            <h4 class="result-title">{{ topic.title }}</h4>
+            <span class="result-date">{{ topic.date }}</span>
+          </div>
+          <div class="result-body">
+            <p class="result-content">{{ topic.content }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages Section -->
+      <div *ngIf="hasMessages" class="results-section">
+        <div class="section-divider">
+          <p class="section-title">Результати серед повідомлень</p>
+        </div>
+        
+        <div 
+          *ngFor="let message of filteredMessages()" 
+          class="result-item"
+          (click)="onResultClick(message)"
+        >
+          <div class="result-header">
+            <h4 class="result-title">{{ message.title }}</h4>
+            <span class="result-date">{{ message.date }}</span>
+          </div>
+          <div class="result-body">
+            <p class="result-content">{{ message.content }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!hasResults && hasSearchQuery && !isLoading" class="empty-state">
+        <p class="empty-message">Результатів не знайдено</p>
+      </div>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoading" class="loading-state">
+        <p class="loading-message">Пошук...</p>
+      </div>
+
+    </div>
+
+    <!-- Scrollbar -->
+    <div class="scrollbar"></div>
+  </div>
+</div>

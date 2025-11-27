@@ -1,0 +1,248 @@
+/* Reply Message Container */
+.reply-message-container {
+  background: #ffffff;
+  border: 1px solid #f2f3f6;
+  border-radius: 8px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: 'Daikon', sans-serif;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Message Header */
+.message-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.author-name {
+  flex: 1;
+  font-family: 'Daikon', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #17273f;
+  margin: 0;
+  white-space: pre-wrap;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+.more-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #737c89;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.more-button:hover {
+  color: #17273f;
+}
+
+.more-button:focus-visible {
+  outline: 2px solid #008cff;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Message Body */
+.message-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Reply Quote */
+.reply-quote {
+  background: #ebf7ff;
+  border-radius: 0 5px 4px 0;
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.reply-quote:hover {
+  background: #d6f0ff;
+}
+
+.reply-line {
+  background: #008cff;
+  border-radius: 4px;
+  width: 1px;
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+.reply-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  min-height: 1px;
+  min-width: 1px;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.reply-header {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.reply-author {
+  flex: 1;
+  font-family: 'Daikon', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #17273f;
+  white-space: pre-wrap;
+  min-height: 1px;
+  min-width: 1px;
+}
+
+.reply-text {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.reply-message {
+  font-family: 'Daikon', sans-serif;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #161616;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 100%;
+}
+
+/* Main Content */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.message-text {
+  font-family: 'Daikon', sans-serif;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #161616;
+  margin: 0;
+  white-space: pre-wrap;
+  width: 100%;
+}
+
+/* Message Footer */
+.message-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.reply-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: 'Daikon', sans-serif;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #737c89;
+  text-align: right;
+  transition: color 0.2s ease;
+}
+
+.reply-button:hover {
+  color: #17273f;
+}
+
+.reply-button:focus-visible {
+  outline: 2px solid #008cff;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.message-details {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.message-time {
+  font-family: 'Daikon', sans-serif;
+  font-size: 12px;
+  line-height: 1.35;
+  color: #737c89;
+  text-align: right;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .reply-message-container {
+    padding: 6px;
+    gap: 6px;
+  }
+  
+  .message-body {
+    gap: 3px;
+  }
+  
+  .reply-content {
+    padding: 6px;
+    gap: 3px;
+  }
+  
+  .message-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .message-details {
+    align-self: flex-end;
+  }
+}
+
+/* Focus and Accessibility */
+.reply-quote:focus-visible {
+  outline: 2px solid #008cff;
+  outline-offset: 2px;
+}
+
+/* Hover states */
+.reply-message-container:hover {
+  border-color: #e8e8e8;
+}
+
+/* Animation for smooth interactions */
+.reply-quote,
+.reply-button,
+.more-button {
+  transition: all 0.2s ease;
+}

@@ -1,7 +1,7 @@
 <div class="chat-modal">
   <div class="chat-header">
     <div class="chat-title">
-      Обговорення обʼєкту: Київський навчальний заклад (Інфраструктура)
+      Обговорення обʼєкту
     </div>
     <button class="chat-icon-button" type="button" aria-label="Закрити">
       <span class="icon icon-close"></span>
@@ -9,86 +9,62 @@
   </div>
 
   <div class="chat-columns">
-    <aside class="chat-sidebar">
-      <div class="sidebar-search">
-        <span class="icon icon-search"></span>
-        <input type="text" placeholder="Шукати серед коментарів..." />
-      </div>
+    <app-topic-list
+      [topics]="(topics$ | async) || []"
+      [selectedTopicId]="(selectedTopicId$ | async)"
+      (selectTopic)="onSelectTopic($event)"
+      (createTopic)="onCreateTopic()">
+    </app-topic-list>
 
-      <div class="sidebar-topics">
-        @for (topic of topics; track topic.id) {
-          <article class="topic-card" [class.topic-card--active]="topic.active">
-            <header>
-              <h4>{{ topic.title }}</h4>
-              <time>{{ topic.date }}</time>
-            </header>
-            <p>{{ topic.preview }}</p>
-          </article>
+    <section class="chat-content-area">
+
+      @if (selectedTopicId$ | async; as topicId) {
+        @if (pinnedMessage$ | async; as pinnedMsg) {
+          <!-- TODO: scroll to message -->
+          <div class="pinned-header" (click)="onPinnedMessageClick(pinnedMsg.id)">
+            <div class="pinned-bar"></div>
+            <div class="pinned-content">
+              <div class="pinned-title">Закріплене повідомлення</div>
+              <div class="pinned-text">{{ pinnedMsg.text }}</div>
+            </div>
+            <button class="pinned-close" (click)="onPin(pinnedMsg); $event.stopPropagation()">✕</button>
+          </div>
         }
-      </div>
 
-      <div class="sidebar-footer">
-        <button class="btn btn-primary" type="button">
-          <span class="icon icon-comments"></span>
-          Створити тему
-        </button>
-      </div>
-    </aside>
-
-    <section class="chat-content">
-      <div class="chat-timeline-label">Сьогодні</div>
-
-      <div class="chat-message-list">
-        @for (message of messages; track message.id) {
-          <article
-            class="message-card"
-            [class.message-card--right]="message.align === 'end'"
-          >
-            <header>
-              <span class="author">{{ message.author }}</span>
-              <button class="chat-icon-button" type="button" aria-label="Опції">
-                <span class="icon icon-more"></span>
-              </button>
-            </header>
-
-            @if (message.reply) {
-              <div class="message-reply">
-                <div class="reply-line"></div>
-                <div class="reply-content">
-                  <div class="reply-author">{{ message.reply.author }}</div>
-                  <div class="reply-text">
-                    {{ message.reply.text }}
-                  </div>
-                </div>
-              </div>
-            }
-
-            <p class="message-text">
-              {{ message.text }}
-            </p>
-
-            <footer>
-              <button class="link-button" type="button">Відповісти</button>
-              <span class="message-time">{{ message.time }}</span>
-            </footer>
-          </article>
+        @if (topicId === 'new') {
+          <div class="new-topic-header">
+            <h4>Створення нової теми</h4>
+            <p>Напишіть перше повідомлення, щоб почати обговорення.</p>
+          </div>
         }
-      </div>
 
-      <form class="chat-input-row">
-        <label class="chat-input">
-          <input type="text" placeholder="Напишіть коментар" />
-        </label>
-        <div class="chat-submit">
-          <button class="btn btn-primary" type="button" aria-label="Надіслати">
-            <span class="icon icon-send"></span>
-          </button>
-          <button class="btn btn-primary btn-primary--split" type="button" aria-label="Більше">
-            <span class="icon icon-arrow-down"></span>
-          </button>
+        <app-message-list
+          [messages]="(messages$ | async) || []"
+          [currentUserId]="currentUserId"
+          (pin)="onPin($event)"
+          (hide)="onHide($event)"
+          (delete)="onDelete($event)"
+          (edit)="onEdit($event)"
+          (reply)="onReply($event)"
+          (quoteClick)="onQuoteClick($event)"
+        >
+        </app-message-list>
+
+        <div class="chat-footer">
+          <app-chat-input
+            [replyTo]="replyToMessage()"
+            [editingMessage]="editingMessage()"
+            (cancelContext)="cancelInputContext()"
+            (send)="onSendMessage($event, topicId)">
+          </app-chat-input>
         </div>
-      </form>
+
+      } @else {
+        <div class="empty-selection-state">
+          <div class="empty-icon">💬</div>
+          <p>Оберіть тему зліва або створіть нову</p>
+        </div>
+      }
     </section>
   </div>
 </div>
-
