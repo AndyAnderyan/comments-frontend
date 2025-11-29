@@ -1,1 +1,34 @@
-<p>user-selector works!</p>
+<div class="user-selector-container">
+  <button
+    class="selector-btn"
+    [class.active]="isOpen"
+    type="button"
+    (click)="toggleMenu($event)"
+    title="Отримувачі сповіщень">
+    <span class="icon icon-at">{{ '@' }}</span>
+    @if (selectedIds.length > 0) {
+      <span class="badge">{{ selectedIds.length }}</span>
+    }
+  </button>
+
+  @if (isOpen) {
+    <div class="dropdown-menu" (click)="$event.stopPropagation()">
+      <div class="dropdown-header">Сповістити:</div>
+      <div class="dropdown-list">
+        @for (user of users; track user.id) {
+          <label class="user-item">
+            <input
+              type="checkbox"
+              [checked]="isSelected(user.id)"
+              (change)="toggleUser(user.id)">
+            <span class="user-name">{{ user.name }}</span>
+          </label>
+        }
+        @if (users.length === 0) {
+          <div class="empty-state">Список порожній</div>
+        }
+      </div>
+    </div>
+    <div class="menu-overlay" (click)="closeMenu()"></div>
+  }
+</div>

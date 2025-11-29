@@ -1,4 +1,4 @@
 export interface CommentUpdateDto {
   text: string;
-  recipientsIds?: string[];
+  recipientIds?: string[];
 }

@@ -1,27 +1,24 @@
-<section class="chat-content">
-  <div class="chat-timeline-label">Сьогодні</div>
+<div class="messages-container" #scrollContainer>
+  <div class="timeline-label">Сьогодні</div>
 
-  <div class="chat-message-list" #scrollContainer>
-    @for (msg of messages; track msg.id) {
-      <div #messageItem class="message-wrapper">
-        <app-message-item
-          [message]="msg"
-          [isMine]="msg.authorId === currentUserId"
-          (pin)="pin.emit($event)"
-          (hide)="hide.emit($event)"
-          (delete)="delete.emit($event)"
-          (edit)="edit.emit($event)"
-          (reply)="reply.emit($event)"
-          (quoteClick)="quoteClick.emit($event)"
-        >
-        </app-message-item>
-      </div>
-    }
+  @for (msg of messages; track msg.id) {
+    <div class="message-wrapper" #messageItem>
+      <app-message-item
+        [message]="msg"
+        [isMine]="msg.authorId === currentUserId"
+        (pin)="pin.emit($event)"
+        (hide)="hide.emit($event)"
+        (delete)="delete.emit($event)"
+        (edit)="edit.emit($event)"
+        (reply)="reply.emit($event)"
+        (quoteClick)="quoteClick.emit($event)">
+      </app-message-item>
+    </div>
+  }
 
-    @if (messages.length === 0) {
-      <div class="empty-state">
-        <p>Повідомлень немає. Напишіть першим!</p>
-      </div>
-    }
-  </div>
-</section>
+  @if (messages.length === 0) {
+    <div class="empty-state">
+      <p>Повідомлень немає. Напишіть першим!</p>
+    </div>
+  }
+</div>

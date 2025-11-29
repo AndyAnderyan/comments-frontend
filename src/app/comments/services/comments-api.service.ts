@@ -66,8 +66,8 @@ export class CommentsApiService {
     return this.http.post<void>(`${this.API_URL}/${id}/read`, {})
   }
 
-  getRecipients(): Observable<NotificationRecipient[]> {
-    const mockRecipients: NotificationRecipient[] = [
+  getRecipients(): Observable<User[]> {
+    const mockRecipients: User[] = [
       { id: '1', name: 'Олександр Петренко', email: 'o.petrenko@example.com', role: 'admin' },
       { id: '2', name: 'Марія Коваленко', email: 'm.kovalenko@example.com', role: 'user' },
       { id: '3', name: 'Іван Сидоренко', email: 'i.sydorenko@example.com', role: 'user' }

@@ -13,14 +13,68 @@
       [topics]="(topics$ | async) || []"
       [selectedTopicId]="(selectedTopicId$ | async)"
       (selectTopic)="onSelectTopic($event)"
-      (createTopic)="onCreateTopic()">
+      (createTopicStart)="onCreateTopicStart()"
+      (createTopicCancel)="onCreateTopicCancel()"
+      (createTopicSubmit)="onCreateTopicSubmit($event)">
     </app-topic-list>
 
     <section class="chat-content-area">
+      @if (selectedTopicId$ | async; as topicId) {
+
+        @if (topicId !== 'new') {
+          @if (pinnedMessage$ | async; as pinnedMsg) {
+            <div class="pinned-header" (click)="scrollToMessage(pinnedMsg.id)">
+              <div class="pinned-bar"></div>
+              <div class="pinned-content">
+                <div class="pinned-title">Закріплене повідомлення</div>
+                <div class="pinned-text">{{ pinnedMsg.text }}</div>
+              </div>
+              <button
+                class="pinned-close"
+                title="Відкріпити"
+                (click)="$event.stopPropagation(); onUnpin(pinnedMsg)">
+                ✕
+              </button>
+            </div>
+          }
+
+          <app-message-list
+            [messages]="(messages$ | async) || []"
+            [currentUserId]="currentUserId"
+            (pin)="onPin($event)"
+            (hide)="onHide($event)"
+            (delete)="onDelete($event)"
+            (edit)="onEdit($event)"
+            (reply)="onReply($event)"
+            (quoteClick)="onQuoteClick($event)">
+          </app-message-list>
+
+          <div class="chat-footer">
+            <app-chat-input
+              [replyTo]="replyToMessage()"
+              [editingMessage]="editingMessage()"
+              (cancelContext)="cancelInputContext()"
+              (send)="onSendMessage($event, topicId)">
+            </app-chat-input>
+          </div>
+        } @else {
+          <div class="empty-selection-state">
+            <p>Заповніть форму зліва для створення нової теми</p>
+          </div>
+        }
+
+      } @else {
+        <div class="empty-selection-state">
+          <p>Оберіть тему зліва або створіть нову</p>
+        </div>
+      }
+    </section>
+
+<!--    <section class="chat-content-area">
 
       @if (selectedTopicId$ | async; as topicId) {
         @if (pinnedMessage$ | async; as pinnedMsg) {
-          <!-- TODO: scroll to message -->
+          &lt;!&ndash; TODO: scroll to message &ndash;&gt;
           <div class="pinned-header" (click)="onPinnedMessageClick(pinnedMsg.id)">
             <div class="pinned-bar"></div>
             <div class="pinned-content">
@@ -65,6 +119,6 @@
           <p>Оберіть тему зліва або створіть нову</p>
         </div>
       }
-    </section>
+    </section>-->
   </div>
 </div>

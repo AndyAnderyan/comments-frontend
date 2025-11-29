@@ -1,30 +1,45 @@
-<aside class="chat-sidebar">
-  <div class="sidebar-search">
-    <span class="icon icon-search"></span>
-    <input type="text" placeholder="Шукати серед коментарів..." />
-  </div>
+<div class="sidebar-container">
+  @if (isCreating) {
+    <app-topic-form
+      (create)="createTopicSubmit.emit($event)"
+      (back)="createTopicCancel.emit()">
+    </app-topic-form>
+  } @else {
+    <div class="search-section">
+      <div class="sidebar-search">
+        <span class="icon icon-search"></span>
+        <input type="text" placeholder="Шукати тему..." />
+      </div>
+    </div>
 
-  <div class="sidebar-topics">
-    @for (topic of topics; track topic.id) {
-      <article
-        class="topic-card"
-        [class.topic-card--active]="topic.id === selectedTopicId"
-        (click)="selectTopic.emit(topic.id)">
-        <header>
-          <h4>{{ topic.author.name }}</h4>
-          <time>{{ topic.createdAt | date:'shortTime' }}</time>
-        </header>
-        <p>{{ topic.text }}</p> </article>
-    }
-    @if (topics.length === 0) {
-      <div class="empty-state">Немає тем</div>
-    }
-  </div>
+    <div class="topics-list-container">
+      @for (topic of topics; track topic.id) {
+        <article
+          class="topic-card"
+          [class.topic-card--active]="topic.id === selectedTopicId"
+          (click)="selectTopic.emit(topic.id)">
 
-  <div class="sidebar-footer">
-    <button class="btn btn-primary" type="button" (click)="createTopic.emit()">
-      <span class="icon icon-comments"></span>
-      Створити тему
-    </button>
-  </div>
-</aside>
+          <div class="topic-header">
+            <span class="topic-author">{{ topic.author.name }}</span>
+            <span class="topic-time">{{ topic.createdAt | date:'shortTime' }}</span>
+          </div>
+
+          <p class="topic-preview">{{ topic.text }}</p>
+        </article>
+      }
+
+      @if (topics.length === 0) {
+        <div class="empty-state">
+          Немає активних обговорень
+        </div>
+      }
+    </div>
+
+    <div class="sidebar-footer">
+      <button class="btn-create" (click)="createTopicStart.emit()">
+        <span class="icon icon-plus"></span>
+        Створити тему
+      </button>
+    </div>
+  }
+</div>

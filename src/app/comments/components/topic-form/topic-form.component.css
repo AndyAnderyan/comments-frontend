@@ -1,12 +1,14 @@
 /* Topic form container */
 .topic-form-container {
   background: #fbfbfb;
-  border-right: 1px solid #e8e8e8;
-  width: 304px;
-  height: 587px;
+  /* border-right: 1px solid #e8e8e8;  <-- Прибрали, бо бордер вже є у батьківського контейнера */
+  width: 100%;  /* Було 304px */
+  height: 100%; /* Було 587px */
   display: flex;
   flex-direction: column;
-  font-family: 'Daikon', sans-serif;
+  /* Використовуємо системні шрифти або той, що глобально в проекті (Inter), бо Daikon може не бути */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box;
 }
 
 /* Form content area */
@@ -18,7 +20,7 @@
 }
 
 .input-section {
-  padding: 16px;
+  padding: 16px 8px; /* Трохи зменшив горизонтальний padding, щоб влізло в контейнер з падінгами */
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -26,7 +28,6 @@
 
 /* Form label */
 .form-label {
-  font-family: 'Daikon', sans-serif;
   font-weight: 700;
   font-size: 12px;
   line-height: 1.35;
@@ -38,57 +39,54 @@
 /* Form input */
 .form-input {
   width: 100%;
-  height: 32px;
+  height: 36px; /* Трохи збільшив для зручності */
   padding: 0 12px;
   background: #ffffff;
   border: 1px solid #e8e8e8;
-  border-radius: 8px;
-  font-family: 'Daikon', sans-serif;
+  border-radius: 6px;
   font-size: 12px;
   line-height: 1.35;
   color: #17273f;
   outline: none;
   transition: border-color 0.2s ease;
-  box-sizing: border-box;
-}
-
-.form-input::placeholder {
-  color: #737c89;
+  box-sizing: border-box; /* Важливо для width: 100% */
 }
 
 .form-input:focus {
   border-color: #008cff;
 }
 
+.form-input::placeholder {
+  color: #737c89;
+}
+
 .form-input:disabled {
-  background-color: #f5f5f5;
+  background: #f2f3f6;
   color: #737c89;
   cursor: not-allowed;
 }
 
 /* Button section */
 .button-section {
-  padding: 12px 16px;
-  border-top: 1px solid #e8e8e8;
+  padding: 16px 8px;
   background: #fbfbfb;
-  flex-shrink: 0;
+  border-top: 1px solid #e8e8e8;
 }
 
 .button-group {
   display: flex;
-  gap: 16px;
+  gap: 8px;
   width: 100%;
 }
 
-/* Button styles */
 .btn {
   display: flex;
-  align-items: center;
+  flex-direction: row;
   justify-content: center;
+  align-items: center;
   gap: 8px;
   padding: 6px 8px;
   border-radius: 6px;
-  font-family: 'Daikon', sans-serif;
   font-weight: 700;
   font-size: 12px;
   line-height: 1.35;
@@ -129,46 +127,16 @@
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #0068ff;
-  border-color: #0068ff;
+  background: #0070cc;
+  border-color: #0070cc;
 }
 
 .btn-primary:active:not(:disabled) {
-  background: #0056d6;
-  border-color: #0056d6;
+  background: #005bb5;
+  border-color: #005bb5;
 }
 
-/* Button icon */
 .btn-icon {
   width: 18px;
   height: 18px;
-  flex-shrink: 0;
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .topic-form-container {
-    width: 100%;
-    max-width: 100%;
-  }
-  
-  .button-group {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .btn {
-    width: 100%;
-  }
-}
-
-/* Focus states for accessibility */
-.btn:focus-visible {
-  outline: 2px solid #008cff;
-  outline-offset: 2px;
-}
-
-.form-input:focus-visible {
-  outline: 2px solid #008cff;
-  outline-offset: 2px;
 }

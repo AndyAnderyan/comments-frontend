@@ -1,10 +1,10 @@
 import {Component, ElementRef, inject, signal, ViewChild} from '@angular/core';
 import {CommentFormComponent} from "../comment-form/comment-form.component";
 import {CommonModule} from "@angular/common";
-import {CommentActions} from "../../state/comment.actions";
+import {CommentActions} from "../../comments/state/comment.actions";
 import {Store} from "@ngrx/store";
-import {selectChatMessages, selectEntities, selectSelectedTopicId} from "../../state/comment.selectors";
-import {Comment} from "../../models/comment.model";
+import {selectChatMessages, selectEntities, selectSelectedTopicId} from "../../comments/state/comment.selectors";
+import {Comment} from "../../comments/models/comment.model";
 
 @Component({
   selector: 'app-chat-area',

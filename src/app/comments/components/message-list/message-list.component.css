@@ -1,58 +1,71 @@
 :host {
   display: flex;
+  flex-direction: column;
   flex: 1;
-  min-height: 0; /* Важливо для flex-контейнера */
-  overflow: hidden;
+  min-height: 0;
+  background-color: #f2f3f6;
+  position: relative;
 }
 
-.chat-content {
+.messages-container {
   flex: 1;
+  overflow-y: auto;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  background: #f2f3f6;
-  padding: 8px 12px 0; /* Bottom padding 0 бо інпут окремо */
   gap: 12px;
-  height: 100%;
 }
 
-.chat-timeline-label {
+.timeline-label {
   align-self: center;
   font-size: 12px;
   font-weight: 700;
   color: #737c89;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 4px 12px;
+  border-radius: 12px;
 }
 
-.chat-message-list {
+.message-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  flex: 1;
-  overflow-y: auto;
-  padding-bottom: 12px; /* Відступ знизу */
+  width: 100%;
+  /* Додаємо перехід для плавності */
+  transition: background-color 0.3s ease;
+  border-radius: 8px;
+}
+
+/* Клас для підсвічування */
+.highlight-message {
+  animation: highlight-pulse 2s ease-out;
+}
+
+@keyframes highlight-pulse {
+  0% { background-color: rgba(0, 140, 255, 0.3); }
+  30% { background-color: rgba(0, 140, 255, 0.3); }
+  100% { background-color: transparent; }
 }
 
 .empty-state {
   flex: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   color: #737c89;
   font-size: 13px;
+  min-height: 200px;
 }
 
-/* Анімація фокусу */
-.message-wrapper {
-  transition: background-color 0.5s ease;
-  border-radius: 8px;
+/* Скролбар */
+.messages-container::-webkit-scrollbar {
+  width: 6px;
 }
-
-.highlight-message {
-  animation: highlight 1.5s ease-out;
+.messages-container::-webkit-scrollbar-track {
+  background: transparent;
 }
-
-@keyframes highlight {
-  0% { background-color: rgba(0, 140, 255, 0.2); }
-  50% { background-color: rgba(0, 140, 255, 0.2); }
-  100% { background-color: transparent; }
+.messages-container::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
 }

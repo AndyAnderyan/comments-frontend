@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
 import {CommentThreadComponent} from "../comment-thread/comment-thread.component";
 import {CommonModule} from "@angular/common";
-import {Comment} from "../../models/comment.model";
+import {Comment} from "../../comments/models/comment.model";
 
 @Component({
   selector: 'app-comment-list',

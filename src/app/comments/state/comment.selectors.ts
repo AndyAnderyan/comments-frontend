@@ -34,43 +34,6 @@ export const selectCommentsForCurrentObject = createSelector(
   }
 );
 
-// МЕМОІЗОВАНИЙ селектор для побудови дерева (Thread -> Replies)
-// Це складна операція, тому важливо, щоб вона виконувалась тільки при зміні вхідних даних
-export const selectCommentTree = createSelector(
-  selectCommentsForCurrentObject,
-  selectPinnedCommentId,
-  (comments, pinnedId) => {
-    const commentMap = new Map<string, Comment>();
-    const roots: Comment[] = [];
-
-    // Створюємо копії об'єктів, щоб не мутувати стан, і ініціалізуємо replies
-    comments.forEach((c) => {
-      commentMap.set(c.id, {...c, replies: []})
-    });
-
-    commentMap.forEach((comment) => {
-      if (comment.parentId && commentMap.has(comment.parentId)) {
-        const parent = commentMap.get(comment.parentId)!;
-        parent.replies?.push(comment);
-        parent.replies?.sort(
-          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-        );
-      } else {
-        // Це коментарі верхнього рівня
-        roots.push(comment)
-      }
-    });
-
-    // - Спочатку Pinned (якщо є)
-    // - Потім інші за спаданням дати (нові зверху)
-    return roots.sort((a, b) => {
-      if (a.id === pinnedId) return -1;
-      if (a.id === pinnedId) return 1;
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    })
-  }
-)
-
 // Селектор для СПИСКУ ТЕМ (тільки рівень 0)
 export const selectTopics = createSelector(
   selectCommentsForCurrentObject, // (це той, що фільтрує по objectId/layerId)
@@ -152,6 +115,14 @@ export const selectPinnedComment = createSelector(
     return pinnedId ? entities[pinnedId] || null : null;
   }
 )
+
+export const selectPinnedMessageForCurrentTopic = createSelector(
+  selectChatMessages,
+  (messages) => {
+    // Знаходимо перше повідомлення з прапорцем isPinned
+    return messages.find(m => m.isPinned) || null;
+  }
+);
 
 // Селектор для отримання батьківського повідомлення (для відображення Reply UI)
 // Ми будемо використовувати selectEntities в компоненті, щоб швидко знайти parent по ID.

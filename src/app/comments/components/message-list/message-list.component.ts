@@ -5,7 +5,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  Output, QueryList,
+  Output, QueryList, SimpleChanges,
   ViewChild, ViewChildren
 } from '@angular/core';
 import {MessageItemComponent} from "../message-item/message-item.component";
@@ -29,7 +29,7 @@ export class MessageListComponent implements AfterViewChecked, OnChanges {
   @Output() pin = new EventEmitter<Comment>();
   @Output() hide = new EventEmitter<Comment>();
   @Output() delete = new EventEmitter<string>();
-  @Output() edit = new EventEmitter<{ id: string, text: string }>();
+  @Output() edit = new EventEmitter<Comment>();
   @Output() reply = new EventEmitter<Comment>();
   @Output() quoteClick = new EventEmitter<string>(); // ID батьківського коментаря
 
@@ -39,8 +39,17 @@ export class MessageListComponent implements AfterViewChecked, OnChanges {
   // Отримуємо доступ до всіх елементів повідомлень у списку
   @ViewChildren('messageItem', { read: ElementRef }) messageElements!: QueryList<ElementRef>;
 
-  ngOnChanges() {
-    this.shouldScroll = true; // Скролити вниз при нових повідомленнях
+  ngOnChanges(changes: SimpleChanges) {
+    // Якщо список повідомлень змінився і додались нові - скролимо вниз
+    if (changes['messages'] && !changes['messages'].firstChange) {
+      const prev = changes['messages'].previousValue || [];
+      const curr = changes['messages'].currentValue || [];
+      if (curr.length > prev.length) {
+        this.shouldScroll = true;
+      }
+    } else if (changes['messages'] && changes['messages'].firstChange) {
+      this.shouldScroll = true;
+    }
   }
 
   ngAfterViewChecked() {

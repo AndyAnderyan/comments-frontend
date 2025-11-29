@@ -1,8 +1,8 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
-import {CommentActions} from "../../state/comment.actions";
+import {CommentActions} from "../../comments/state/comment.actions";
 import {Store} from "@ngrx/store";
 import {ChatAreaComponent} from "../chat-area/chat-area.component";
-import {TopicListComponent} from "../topic-list/topic-list.component";
+import {TopicListComponent} from "../../comments/components/topic-list/topic-list.component";
 import {CommonModule} from "@angular/common";
 
 @Component({

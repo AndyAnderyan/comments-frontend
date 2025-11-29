@@ -1,8 +1,8 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {CommonModule} from "@angular/common";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Comment} from "../../models/comment.model"
-import {NotificationRecipient} from "../../../core/models/notification-recipient.model";
+import {Comment} from "../../comments/models/comment.model"
+import {NotificationRecipient} from "../../core/models/notification-recipient.model";
 
 @Component({
   selector: 'app-comment-form',

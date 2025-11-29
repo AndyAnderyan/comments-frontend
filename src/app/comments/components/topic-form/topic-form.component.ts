@@ -1,15 +1,19 @@
-import { Component, EventEmitter, Input, Output, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {Component, EventEmitter, inject, Input, Output} from '@angular/core';
+import {User} from "../../../core/models/user.model";
+import {UserSelectorComponent} from "../user-selector/user-selector.component";
+import {CommonModule} from "@angular/common";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-topic-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule, ReactiveFormsModule
+  ],
   templateUrl: './topic-form.component.html',
-  styleUrls: ['./topic-form.component.css']
+  styleUrl: './topic-form.component.css'
 })
-export class TopicFormComponent implements OnInit {
+export class TopicFormComponent {
   @Input() placeholder: string = 'Напишіть тему обговорення';
   @Input() disabled: boolean = false;
 
@@ -21,7 +25,7 @@ export class TopicFormComponent implements OnInit {
 
   ngOnInit() {
     this.topicForm = this.fb.group({
-      topic: ['', [Validators.required, Validators.maxLength(200)]]
+      topic: ['', [Validators.required, Validators.maxLength(2000)]]
     });
   }
 
@@ -39,11 +43,7 @@ export class TopicFormComponent implements OnInit {
     }
   }
 
-  get topic() {
-    return this.topicForm.get('topic');
-  }
-
   get isCreateDisabled(): boolean {
-    return this.disabled || !this.topicForm.valid || !this.topic?.value?.trim();
+    return this.topicForm.invalid || this.disabled || !this.topicForm.get('topic')?.value?.trim();
   }
 }

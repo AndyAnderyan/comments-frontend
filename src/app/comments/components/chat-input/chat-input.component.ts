@@ -2,7 +2,7 @@ import {
   Component,
   EventEmitter,
   inject,
-  Input,
+  Input, OnChanges,
   OnInit,
   Output,
   signal,
@@ -22,11 +22,11 @@ import {Comment} from "../../models/comment.model"
   templateUrl: './chat-input.component.html',
   styleUrl: './chat-input.component.css'
 })
-export class ChatInputComponent implements OnInit{
+export class ChatInputComponent implements OnInit, OnChanges{
   @Input() replyTo: Comment | null = null;
   @Input() editingMessage: Comment | null = null;
 
-  @Output() send = new EventEmitter<{ text: string, recipientsIds: string[] }>();
+  @Output() send = new EventEmitter<{ text: string, recipientIds: string[] }>();
   @Output() cancelContext = new EventEmitter<void>();
 
   private apiService = inject(CommentsApiService);
@@ -46,6 +46,11 @@ export class ChatInputComponent implements OnInit{
   ngOnChanges(changes: SimpleChanges) {
     if (changes['editingMessage'] && this.editingMessage) {
       this.text = this.editingMessage.text;
+    }
+
+    // Якщо скасували редагування (прийшов null) - чистимо
+    if (changes['editingMessage'] && !this.editingMessage && !changes['editingMessage'].firstChange) {
+      this.text = '';
     }
   }
 
@@ -75,7 +80,7 @@ export class ChatInputComponent implements OnInit{
     if (this.text.trim()) {
       this.send.emit({
         text: this.text,
-        recipientsIds: this.selectedRecipientsIds
+        recipientIds: this.selectedRecipientsIds
       });
       this.text = '';
       this.selectedRecipientsIds = []; // Очистити вибір після відправки

@@ -1,7 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output, signal} from '@angular/core';
 import {CommonModule} from "@angular/common";
-import {AuthService} from "../../../core/services/auth.service";
-import {Comment} from "../../models/comment.model"
+import {AuthService} from "../../core/services/auth.service";
+import {Comment} from "../../comments/models/comment.model"
 import {CommentFormComponent} from "../comment-form/comment-form.component";
 
 type ThreadAction = 'none' | 'reply' | 'edit';

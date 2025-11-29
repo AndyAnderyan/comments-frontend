@@ -8,12 +8,13 @@ import {AuthService} from "../../../core/services/auth.service";
 import {Observable} from "rxjs";
 import {
   selectChatMessages,
-  selectPinnedComment,
+  selectPinnedComment, selectPinnedMessageForCurrentTopic,
   selectSelectedTopicId,
   selectTopics
 } from "../../state/comment.selectors";
 import {Comment} from "../../models/comment.model";
 import {CommentActions} from "../../state/comment.actions";
+import {CommentsApiService} from "../../services/comments-api.service";
 
 @Component({
   selector: 'app-chat',
@@ -33,11 +34,14 @@ export class ChatComponent implements OnInit {
 
   private store = inject(Store);
   private authService = inject(AuthService);
+  private commentsApiService = inject(CommentsApiService);
 
   topics$: Observable<Comment[]> = this.store.select(selectTopics);
   selectedTopicId$: Observable<string | null> = this.store.select(selectSelectedTopicId);
   messages$: Observable<Comment[]> = this.store.select(selectChatMessages);
-  pinnedMessage$: Observable<Comment | null> = this.store.select(selectPinnedComment);
+
+  pinnedMessage$: Observable<Comment | null> = this.store.select(selectPinnedMessageForCurrentTopic);
+  users$ = this.commentsApiService.getRecipients();
 
   currentUserId = this.authService.currentUserId();
 
@@ -55,6 +59,32 @@ export class ChatComponent implements OnInit {
     }
   }
 
+  onCreateTopicStart() {
+    this.store.dispatch(CommentActions.selectTopic({ id: 'new' }));
+  }
+
+  onCreateTopicCancel() {
+    this.store.dispatch(CommentActions.selectTopic({ id: null as any }));
+  }
+
+  onCreateTopicSubmit(data: { topic: string }) {
+    // Формуємо текст. Якщо є заголовок, додаємо його першим рядком
+
+    this.store.dispatch(CommentActions.addComment({
+      dto: {
+        text: data.topic,
+        recipientIds: [],
+        objectTypeId: this.objectTypeId,
+        objectId: this.objectId,
+        parentId: undefined // Це нова тема (корінь)
+      }
+    }));
+
+    // Після успішного створення ефект може автоматично вибрати нову тему,
+    // або ми можемо поки що скинути на 'null', щоб повернутися до списку
+    this.onCreateTopicCancel(); // Опціонально, якщо не чекаємо успіху
+  }
+
   onSelectTopic(topicId: string) {
     this.store.dispatch(CommentActions.selectTopic({ id: topicId }));
     this.cancelInputContext();
@@ -66,7 +96,7 @@ export class ChatComponent implements OnInit {
     this.cancelInputContext();
   }
 
-  onSendMessage(event: { text: string, recipientsIds: string[] }, currentTopicId: string | undefined) {
+  onSendMessage(event: { text: string; recipientIds: string[] }, currentTopicId: string | undefined) {
     // Якщо currentTopicId === 'new', то parentId = null (нова тема)
     // Інакше parentId = currentTopicId (відповідь у тему)
     if (this.editingMessage()) {
@@ -74,7 +104,7 @@ export class ChatComponent implements OnInit {
         id: this.editingMessage()!.id,
         dto: {
           text: event.text,
-          recipientsIds: event.recipientsIds
+          recipientIds: event.recipientIds
         }
       }))
     } else {
@@ -83,7 +113,7 @@ export class ChatComponent implements OnInit {
       this.store.dispatch(CommentActions.addComment({
         dto: {
           text: event.text,
-          recipientsIds: event.recipientsIds,
+          recipientIds: event.recipientIds,
           objectTypeId: this.objectTypeId,
           objectId: this.objectId,
           parentId: parentId
@@ -95,8 +125,8 @@ export class ChatComponent implements OnInit {
   }
 
   // Дії з повідомленнями
-  onEdit(event: { id: string, text: string }) {
-    this.editingMessage.set({ id: event.id, text: event.text } as Comment);
+  onEdit(comment: Comment) {
+    this.editingMessage.set(comment);
     this.replyToMessage.set(null);
   }
 
@@ -115,6 +145,10 @@ export class ChatComponent implements OnInit {
     } else {
       this.store.dispatch(CommentActions.pinComment({ comment }))
     }
+  }
+
+  onUnpin(comment: Comment) {
+    this.store.dispatch(CommentActions.unpinComment({ comment }));
   }
 
   onUnpinGlobal() {
